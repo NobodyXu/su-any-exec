@@ -1,5 +1,5 @@
-# su-any-exec
-switch user and group id and exec without passwd, intended to replace sudo when building container.
+# su-exec
+switch user and group id and exec without passwd, can be used to replace sudo when building container.
 
 ## Purpose
 
