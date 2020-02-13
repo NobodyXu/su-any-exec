@@ -1,5 +1,6 @@
 /* set user and group id and exec */
 
+#include <stdnoreturn.h>
 #include <sys/types.h>
 
 #include <err.h>
@@ -11,7 +12,7 @@
 #include <string.h>
 #include <unistd.h>
 
-static _Noreturn void usage(const char *argv0, int exitcode)
+static noreturn void usage(const char *argv0, int exitcode)
 {
 	printf("Usage: %s user-spec command [args]\n", argv0);
 	exit(exitcode);
