@@ -44,6 +44,12 @@ wget https://github.com/NobodyXu/su-exec/releases/download/v0.2.1/su-exec
 chmod a+xs su-exec
 ```
 
+Removing `su-exec` is pretty simple:
+
+```
+su-exec root:root rm /usr/local/bin/su-exec
+```
+
 ## TTY & parent/child handling
 
 Notice how `su` will make `ps` be a child of a shell while `su-exec`
