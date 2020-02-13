@@ -1,5 +1,5 @@
 
-CFLAGS ?= -Wall -Werror 
+CFLAGS ?= -Wall -Werror -std=c11
 LDFLAGS ?=
 
 PROG := su-any-exec

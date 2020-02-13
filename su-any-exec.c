@@ -11,7 +11,7 @@
 #include <string.h>
 #include <unistd.h>
 
-static void usage(const char *argv0, int exitcode)
+static _Noreturn void usage(const char *argv0, int exitcode)
 {
 	printf("Usage: %s user-spec command [args]\n", argv0);
 	exit(exitcode);
