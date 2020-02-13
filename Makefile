@@ -1,5 +1,5 @@
 
-CFLAGS ?= -Wall -Werror -g
+CFLAGS ?= -Wall -Werror 
 LDFLAGS ?=
 
 PROG := su-exec
