@@ -14,4 +14,4 @@ $(PROG)-static: $(SRCS)
 	$(CC) $(CFLAGS) -o $@ $^ -static $(LDFLAGS)
 
 clean:
-	rm -f $(PROG) $(PROG)-static
+	rm -f $(PROG) $(PROG)-static a.out
