@@ -2,7 +2,7 @@
 CFLAGS ?= -Wall -Werror 
 LDFLAGS ?=
 
-PROG := su-exec
+PROG := su-any-exec
 SRCS := $(PROG).c
 
 all: $(PROG)
