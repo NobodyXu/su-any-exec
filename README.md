@@ -24,6 +24,26 @@ can be used instead of names. Example:
 $ su-exec apache:1000 /usr/sbin/httpd -f /opt/www/httpd.conf
 ```
 
+### Replace `sudo`
+
+If you compile softwares in a container, you probably need `sudo`, since compiling with root may not be
+a good idea and some `Makefile` like `lede` even forbidden building as root.
+
+However, `sudo` is such a overkill for unattented auto-build of a container since
+ - It requires dependencies to be installed.
+ - You need to configure `sudo` to allow password-less `sudo` for your user
+ - You cannot run `sudo apt-get remove -y sudo` to uninstall, you have to somewhat switch to root user without `sudo`
+ to uninstall it.
+
+So how to replace `sudo` with `su-exec` for containers? Simple, just execute the following lines with `root`:
+
+```
+cd /usr/local/bin/
+
+wget https://github.com/NobodyXu/su-exec/releases/download/v0.2.1/su-exec
+chmod a+xs su-exec
+```
+
 ## TTY & parent/child handling
 
 Notice how `su` will make `ps` be a child of a shell while `su-exec`
