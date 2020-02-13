@@ -11,9 +11,7 @@
 #include <string.h>
 #include <unistd.h>
 
-static char *argv0;
-
-static void usage(int exitcode)
+static void usage(const char *argv0, int exitcode)
 {
 	printf("Usage: %s user-spec command [args]\n", argv0);
 	exit(exitcode);
@@ -27,9 +25,8 @@ int main(int argc, char *argv[])
 	uid_t uid = getuid();
 	gid_t gid = getgid();
 
-	argv0 = argv[0];
 	if (argc < 3)
-		usage(0);
+		usage(argv[0], 0);
 
 	user = argv[1];
 	group = strchr(user, ':');
