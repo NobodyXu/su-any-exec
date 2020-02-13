@@ -8,7 +8,7 @@ privileges. The program will be exceuted directly and not run as a child,
 like su and sudo does, which avoids TTY and signal issues (see below).
 
 Notice that su-exec depends on being run by the root user, non-root
-users do not have permission to change uid/gid.
+users do not have permission to change uid/gid, or you need to setuid on it.
 
 ## Usage
 
