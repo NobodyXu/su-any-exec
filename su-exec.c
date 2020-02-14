@@ -59,13 +59,13 @@ static gid_t parse_group(const char *group)
 
 int main(int argc, char *argv[])
 {
+	if (argc < 3)
+		usage(argv[0], 0);
+
 	char *user, *group, **cmdargv;
 
 	uid_t uid = getuid();
 	gid_t gid = getgid();
-
-	if (argc < 3)
-		usage(argv[0], 0);
 
 	user = argv[1];
 	group = strchr(user, ':');
