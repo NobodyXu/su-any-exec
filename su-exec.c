@@ -62,8 +62,6 @@ int main(int argc, char *argv[])
 
     char *user, *group, **cmdargv;
 
-    gid_t gid = getgid();
-
     user = argv[1];
     group = strchr(user, ':');
     if (group)
@@ -78,16 +76,17 @@ int main(int argc, char *argv[])
     else
         uid = getuid();
 
-    if (pw != NULL)
-        gid = pw->pw_gid;
-
     setenv("HOME", pw != NULL ? pw->pw_dir : "/", 1);
 
+    gid_t gid;
     if (group && group[0] != '\0') {
         /* group was specified, ignore grouplist for setgroups later */
         pw = NULL;
         gid = parse_group(group);
-    }
+    } else if (pw != NULL)
+        gid = pw->pw_gid;
+    else
+        gid = getgid();
 
     if (pw == NULL) {
         if (setgroups(1, &gid) < 0)
