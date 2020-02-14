@@ -111,6 +111,8 @@ int main(int argc, char *argv[])
 			if (glist == NULL)
 				err(1, "malloc");
 		}
+
+        free(glist);
 	}
 
 	if (setgid(gid) < 0)
