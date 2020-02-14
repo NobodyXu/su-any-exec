@@ -18,6 +18,9 @@ static noreturn void usage(const char *argv0, int exitcode)
 	exit(exitcode);
 }
 
+/**
+ * uid_p != NULL, user != NULL
+ */
 static struct passwd* parse_user(uid_t *uid_p, const char *user)
 {
     struct passwd *pw = NULL;
