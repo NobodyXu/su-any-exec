@@ -14,8 +14,8 @@
 
 static noreturn void usage(const char *argv0, int exitcode)
 {
-	printf("Usage: %s user-spec command [args]\n", argv0);
-	exit(exitcode);
+    printf("Usage: %s user-spec command [args]\n", argv0);
+    exit(exitcode);
 }
 
 /**
@@ -25,19 +25,19 @@ static struct passwd* parse_user(uid_t *uid_p, const char *user)
 {
     struct passwd *pw = NULL;
 
-	if (user[0] != '\0') {
+    if (user[0] != '\0') {
         char *end;
-		uid_t nuid = strtol(user, &end, 10);
+        uid_t nuid = strtol(user, &end, 10);
 
-		if (*end == '\0') {
-			*uid_p = nuid;
-	        pw = getpwuid(nuid);
+        if (*end == '\0') {
+            *uid_p = nuid;
+            pw = getpwuid(nuid);
         } else {
-			pw = getpwnam(user);
-			if (pw == NULL)
-				err(1, "getpwnam(%s)", user);
-		}
-	}
+            pw = getpwnam(user);
+            if (pw == NULL)
+                err(1, "getpwnam(%s)", user);
+        }
+    }
 
     return pw;
 }
@@ -51,78 +51,78 @@ static gid_t parse_group(const char *group)
     gid_t ngid = strtol(group, &end, 10);
 
     if (*end == '\0')
-    	return ngid;
+        return ngid;
     else {
-    	struct group *gr = getgrnam(group);
-    	if (gr == NULL)
-    		err(1, "getgrnam(%s)", group);
-    	return gr->gr_gid;
+        struct group *gr = getgrnam(group);
+        if (gr == NULL)
+            err(1, "getgrnam(%s)", group);
+        return gr->gr_gid;
     }
 }
 
 int main(int argc, char *argv[])
 {
-	if (argc < 3)
-		usage(argv[0], 0);
+    if (argc < 3)
+        usage(argv[0], 0);
 
-	char *user, *group, **cmdargv;
+    char *user, *group, **cmdargv;
 
-	uid_t uid = getuid();
-	gid_t gid = getgid();
+    uid_t uid = getuid();
+    gid_t gid = getgid();
 
-	user = argv[1];
-	group = strchr(user, ':');
-	if (group)
-		*group++ = '\0';
+    user = argv[1];
+    group = strchr(user, ':');
+    if (group)
+        *group++ = '\0';
 
-	cmdargv = &argv[2];
+    cmdargv = &argv[2];
 
-	struct passwd *pw = parse_user(&uid, user);
-	if (pw != NULL) {
-		uid = pw->pw_uid;
-		gid = pw->pw_gid;
-	}
+    struct passwd *pw = parse_user(&uid, user);
+    if (pw != NULL) {
+        uid = pw->pw_uid;
+        gid = pw->pw_gid;
+    }
 
-	setenv("HOME", pw != NULL ? pw->pw_dir : "/", 1);
+    setenv("HOME", pw != NULL ? pw->pw_dir : "/", 1);
 
-	if (group && group[0] != '\0') {
+    if (group && group[0] != '\0') {
         /* group was specified, ignore grouplist for setgroups later */
         pw = NULL;
         gid = parse_group(group);
     }
 
-	if (pw == NULL) {
-		if (setgroups(1, &gid) < 0)
-			err(1, "setgroups(%i)", gid);
-	} else {
-		int ngroups = 0;
-		gid_t *glist = NULL;
+    if (pw == NULL) {
+        if (setgroups(1, &gid) < 0)
+            err(1, "setgroups(%i)", gid);
+    } else {
+        int ngroups = 0;
+        gid_t *glist = NULL;
 
-		while (1) {
-			int r = getgrouplist(pw->pw_name, gid, glist, &ngroups);
+        while (1) {
+            int r = getgrouplist(pw->pw_name, gid, glist, &ngroups);
 
-			if (r >= 0) {
-				if (setgroups(ngroups, glist) < 0)
-					err(1, "setgroups");
-				break;
-			}
+            if (r >= 0) {
+                if (setgroups(ngroups, glist) < 0)
+                    err(1, "setgroups");
+                break;
+            }
 
-			glist = realloc(glist, ngroups * sizeof(gid_t));
-			if (glist == NULL)
-				err(1, "malloc");
-		}
+            glist = realloc(glist, ngroups * sizeof(gid_t));
+            if (glist == NULL)
+                err(1, "malloc");
+        }
 
         free(glist);
-	}
+    }
 
-	if (setgid(gid) < 0)
-		err(1, "setgid(%i)", gid);
+    if (setgid(gid) < 0)
+        err(1, "setgid(%i)", gid);
 
-	if (setuid(uid) < 0)
-		err(1, "setuid(%i)", uid);
+    if (setuid(uid) < 0)
+        err(1, "setuid(%i)", uid);
 
-	execvp(cmdargv[0], cmdargv);
-	err(1, "%s", cmdargv[0]);
+    execvp(cmdargv[0], cmdargv);
+    err(1, "%s", cmdargv[0]);
 
-	return 1;
+    return 1;
 }
