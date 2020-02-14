@@ -66,6 +66,31 @@ static gid_t parse_group(const char *group)
     }
 }
 
+/**
+ * user != NULL, glist_p != NULL
+ *
+ * After the call, *glist_p will point to heap memory,
+ * and this call will return the number of elements in it.
+ */
+int Getgrouplist(const char *user, gid_t gid, gid_t **glist_p)
+{
+    int ngroups = 0;
+    gid_t *glist = NULL;
+
+    while (1) {
+        int ret = getgrouplist(user, gid, glist, &ngroups);
+
+        if (ret >= 0) {
+            *glist_p = glist;
+            return ngroups;
+        }
+
+        glist = realloc(glist, ngroups * sizeof(gid_t));
+        if (glist == NULL)
+            err(1, "malloc");
+    }
+}
+
 int main(int argc, char *argv[])
 {
     if (argc < 3)
@@ -98,22 +123,11 @@ int main(int argc, char *argv[])
         if (setgroups(1, &gid) < 0)
             err(1, "setgroups(%i)", gid);
     } else {
-        int ngroups = 0;
-        gid_t *glist = NULL;
+        gid_t *glist;
+        int ngroups = Getgrouplist(pw->pw_name, gid, &glist);
 
-        while (1) {
-            int r = getgrouplist(pw->pw_name, gid, glist, &ngroups);
-
-            if (r >= 0) {
-                if (setgroups(ngroups, glist) < 0)
-                    err(1, "setgroups");
-                break;
-            }
-
-            glist = realloc(glist, ngroups * sizeof(gid_t));
-            if (glist == NULL)
-                err(1, "malloc");
-        }
+        if (setgroups(ngroups, glist) < 0)
+            err(1, "setgroups");
 
         free(glist);
     }
