@@ -18,6 +18,27 @@ static noreturn void usage(const char *argv0, int exitcode)
 	exit(exitcode);
 }
 
+static struct passwd* parse_user(uid_t *uid_p, const char *user)
+{
+    struct passwd *pw = NULL;
+
+	if (user[0] != '\0') {
+        char *end;
+		uid_t nuid = strtol(user, &end, 10);
+
+		if (*end == '\0') {
+			*uid_p = nuid;
+	        pw = getpwuid(nuid);
+        } else {
+			pw = getpwnam(user);
+			if (pw == NULL)
+				err(1, "getpwnam(%s)", user);
+		}
+	}
+
+    return pw;
+}
+
 int main(int argc, char *argv[])
 {
 	char *user, *group, **cmdargv;
@@ -36,20 +57,7 @@ int main(int argc, char *argv[])
 
 	cmdargv = &argv[2];
 
-	struct passwd *pw = NULL;
-	if (user[0] != '\0') {
-		uid_t nuid = strtol(user, &end, 10);
-		if (*end == '\0')
-			uid = nuid;
-		else {
-			pw = getpwnam(user);
-			if (pw == NULL)
-				err(1, "getpwnam(%s)", user);
-		}
-	}
-	if (pw == NULL) {
-		pw = getpwuid(uid);
-	}
+	struct passwd *pw = parse_user(&uid, user);
 	if (pw != NULL) {
 		uid = pw->pw_uid;
 		gid = pw->pw_gid;
