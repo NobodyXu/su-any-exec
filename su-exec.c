@@ -19,27 +19,22 @@ static noreturn void usage(const char *argv0, int exitcode)
 }
 
 /**
- * uid_p != NULL, user != NULL
+ * user != NULL, pw_p != NULL
  */
-static struct passwd* parse_user(uid_t *uid_p, const char *user)
+static uid_t parse_user(const char *user, struct passwd **pw_p)
 {
-    struct passwd *pw = NULL;
+    char *end;
+    uid_t nuid = strtol(user, &end, 10);
 
-    if (user[0] != '\0') {
-        char *end;
-        uid_t nuid = strtol(user, &end, 10);
-
-        if (*end == '\0') {
-            *uid_p = nuid;
-            pw = getpwuid(nuid);
-        } else {
-            pw = getpwnam(user);
-            if (pw == NULL)
-                err(1, "getpwnam(%s)", user);
-        }
+    if (*end == '\0') {
+        *pw_p = getpwuid(nuid);
+        return nuid;
+    } else {
+        *pw_p = getpwnam(user);
+        if (*pw_p == NULL)
+            err(1, "getpwnam(%s)", user);
+        return (*pw_p)->pw_uid;
     }
-
-    return pw;
 }
 
 /**
@@ -67,7 +62,6 @@ int main(int argc, char *argv[])
 
     char *user, *group, **cmdargv;
 
-    uid_t uid = getuid();
     gid_t gid = getgid();
 
     user = argv[1];
@@ -77,11 +71,15 @@ int main(int argc, char *argv[])
 
     cmdargv = &argv[2];
 
-    struct passwd *pw = parse_user(&uid, user);
-    if (pw != NULL) {
-        uid = pw->pw_uid;
+    uid_t uid;
+    struct passwd *pw = NULL;
+    if (user[0] != '\0')
+        uid = parse_user(user, &pw);
+    else
+        uid = getuid();
+
+    if (pw != NULL)
         gid = pw->pw_gid;
-    }
 
     setenv("HOME", pw != NULL ? pw->pw_dir : "/", 1);
 
