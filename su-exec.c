@@ -18,6 +18,17 @@ static noreturn void usage(const char *argv0, int exitcode)
     exit(exitcode);
 }
 
+static void parse_userspec(char *argv1, const char **user_p, const char **group_p)
+{
+    char *user = argv1;
+    char *group = strchr(user, ':');
+    if (group)
+        *group++ = '\0';
+
+    *user_p = user;
+    *group_p = group;
+}
+
 /**
  * user != NULL, pw_p != NULL
  */
@@ -60,13 +71,11 @@ int main(int argc, char *argv[])
     if (argc < 3)
         usage(argv[0], 0);
 
-    char *user, *group, **cmdargv;
+    const char *user, *group;
+    char **cmdargv;
 
-    user = argv[1];
-    group = strchr(user, ':');
-    if (group)
-        *group++ = '\0';
-
+    parse_userspec(argv[1], &user, &group);
+    
     cmdargv = &argv[2];
 
     uid_t uid;
