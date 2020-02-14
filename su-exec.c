@@ -39,10 +39,27 @@ static struct passwd* parse_user(uid_t *uid_p, const char *user)
     return pw;
 }
 
+/**
+ * group != NULL
+ */
+static gid_t parse_group(const char *group)
+{
+    char *end;
+    gid_t ngid = strtol(group, &end, 10);
+
+    if (*end == '\0')
+    	return ngid;
+    else {
+    	struct group *gr = getgrnam(group);
+    	if (gr == NULL)
+    		err(1, "getgrnam(%s)", group);
+    	return gr->gr_gid;
+    }
+}
+
 int main(int argc, char *argv[])
 {
 	char *user, *group, **cmdargv;
-	char *end;
 
 	uid_t uid = getuid();
 	gid_t gid = getgid();
@@ -66,19 +83,10 @@ int main(int argc, char *argv[])
 	setenv("HOME", pw != NULL ? pw->pw_dir : "/", 1);
 
 	if (group && group[0] != '\0') {
-		/* group was specified, ignore grouplist for setgroups later */
-		pw = NULL;
-
-		gid_t ngid = strtol(group, &end, 10);
-		if (*end == '\0')
-			gid = ngid;
-		else {
-			struct group *gr = getgrnam(group);
-			if (gr == NULL)
-				err(1, "getgrnam(%s)", group);
-			gid = gr->gr_gid;
-		}
-	}
+        /* group was specified, ignore grouplist for setgroups later */
+        pw = NULL;
+        gid = parse_group(group);
+    }
 
 	if (pw == NULL) {
 		if (setgroups(1, &gid) < 0)
