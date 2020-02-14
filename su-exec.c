@@ -72,12 +72,9 @@ int main(int argc, char *argv[])
         usage(argv[0], 0);
 
     const char *user, *group;
-    char **cmdargv;
 
     parse_userspec(argv[1], &user, &group);
     
-    cmdargv = &argv[2];
-
     uid_t uid;
     struct passwd *pw = NULL;
     if (user[0] != '\0')
@@ -127,6 +124,7 @@ int main(int argc, char *argv[])
     if (setuid(uid) < 0)
         err(1, "setuid(%i)", uid);
 
+    char **cmdargv = &argv[2];
     execvp(cmdargv[0], cmdargv);
     err(1, "%s", cmdargv[0]);
 
