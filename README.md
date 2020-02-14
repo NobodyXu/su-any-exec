@@ -40,7 +40,7 @@ So how to replace `sudo` with `su-exec` for containers? Simple, just execute the
 ```
 cd /usr/local/bin/
 
-wget https://github.com/NobodyXu/su-exec/releases/download/v0.2.1/su-exec
+wget https://github.com/NobodyXu/su-exec/releases/download/v0.3/su-exec
 chmod a+xs su-exec
 ```
 
