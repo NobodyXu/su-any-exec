@@ -35,3 +35,4 @@
 *.dSYM/
 
 su-exec
+su-exec-static
