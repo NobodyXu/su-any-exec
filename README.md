@@ -73,6 +73,12 @@ To workaround, use `su-exec env var=val command arg`.
 ## Why reinvent gosu?
 
 This does more or less exactly the same thing as [gosu](https://github.com/tianon/gosu)
-but it is only `14.7kb` when building using `clang-9.0.0-2` and `lld-9.0.0` instead of `1.7MB`, which is installed `gosu 1.10.1` from `apt`.
+but it is only
+
+ - `14.7kb` when building using `clang-9.0.0-2` and `lld-9.0.0` 
+ - `13.9kb` when building using `musl-1.2.0`, `clang-9.0.0-2` and `lld-9.0.0`.
+ - `45.6kb` when still using the above toolchain, but instead built with `-static`.
+
+instead of `1.7MB`, which is installed `gosu 1.10.1` from `apt`.
 Both are installed on `Intel x86-64` platform.
 
