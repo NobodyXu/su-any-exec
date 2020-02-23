@@ -37,16 +37,21 @@ However, `sudo` is such a overkill for unattented auto-build of a container sinc
 
 So how to replace `sudo` with `su-exec` for containers? Simple, just execute the following lines with `root`:
 
+
+ - `14.3kb` when building using `glibc2.3`, `clang-9.0.0-2` and `lld-9.0.0` 
+ - `13.9kb` when building using `musl-1.2.0`, `clang-9.0.0-2` and `lld-9.0.0`.
+ - `45.6kb` when still using the above toolchain, but instead built with `-static`.
+
 ```
 cd /usr/local/bin/
 
-# For dynamic-linked glibc
+# For dynamic-linked glibc, 14.3kb
 wget https://github.com/NobodyXu/su-exec/releases/download/v0.3/su-exec
 
-# For dynamic-linked musl-libc
+# For dynamic-linked musl-libc, 13.9kb
 wget https://github.com/NobodyXu/su-exec/releases/download/v0.3/su-exec-musl
 
-# For static-linked musl-libc
+# For static-linked musl-libc, 45.6kb
 wget https://github.com/NobodyXu/su-exec/releases/download/v0.3/su-exec-static-musl
 chmod a+xs su-exec
 ```
