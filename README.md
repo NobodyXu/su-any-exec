@@ -40,7 +40,14 @@ So how to replace `sudo` with `su-exec` for containers? Simple, just execute the
 ```
 cd /usr/local/bin/
 
+# For dynamic-linked glibc
 wget https://github.com/NobodyXu/su-exec/releases/download/v0.3/su-exec
+
+# For dynamic-linked musl-libc
+wget https://github.com/NobodyXu/su-exec/releases/download/v0.3/su-exec-musl
+
+# For static-linked musl-libc
+wget https://github.com/NobodyXu/su-exec/releases/download/v0.3/su-exec-static-musl
 chmod a+xs su-exec
 ```
 
