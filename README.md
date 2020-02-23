@@ -82,7 +82,7 @@ To workaround, use `su-exec env var=val command arg`.
 This does more or less exactly the same thing as [gosu](https://github.com/tianon/gosu)
 but it is only
 
- - `14.7kb` when building using `clang-9.0.0-2` and `lld-9.0.0` 
+ - `14.3kb` when building using `glibc2.3`, `clang-9.0.0-2` and `lld-9.0.0` 
  - `13.9kb` when building using `musl-1.2.0`, `clang-9.0.0-2` and `lld-9.0.0`.
  - `45.6kb` when still using the above toolchain, but instead built with `-static`.
 
