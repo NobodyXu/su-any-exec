@@ -103,8 +103,10 @@ int main(int argc, char *argv[])
     struct passwd *pw = NULL;
     if (user[0] != '\0')
         uid = parse_user(user, &pw);
-    else
+    else {
         uid = getuid();
+        pw = getpwuid(uid);
+    }
 
     setenv("HOME", pw != NULL ? pw->pw_dir : "/", 1);
     
