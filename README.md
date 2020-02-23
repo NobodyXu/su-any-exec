@@ -24,6 +24,11 @@ can be used instead of names. Example:
 $ su-exec apache:1000 /usr/sbin/httpd -f /opt/www/httpd.conf
 ```
 
+## Warning
+
+Due to the fact that `su-exec` does not allocate new tty, it is vulnerable to [TTY hijacking and arbitrary code execution
+][1].
+
 ### Replace `sudo`
 
 If you compile softwares in a container, you probably need `sudo`, since compiling with root may not be
@@ -94,3 +99,4 @@ but it is only
 instead of `1.7MB`, which is running `gosu 1.10.1` from `apt`.
 Both are installed on `Intel x86-64` platform.
 
+[1]: https://ruderich.org/simon/notes/su-sudo-from-root-tty-hijacking
