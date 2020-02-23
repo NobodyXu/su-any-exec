@@ -107,6 +107,17 @@ int main(int argc, char *argv[])
         uid = getuid();
 
     setenv("HOME", pw != NULL ? pw->pw_dir : "/", 1);
+    
+    if (pw != NULL) {
+        setenv("USER",    pw->pw_name, 1);
+        setenv("LOGNAME", pw->pw_name, 1);
+    } else {
+        char buffer[20]; // 20 is enough for a unsigned 64-bit integer
+        snprintf((char*) &buffer, 20, "%llu", (unsigned long long) uid);
+
+        setenv("USER",    (const char*) &buffer, 1);
+        setenv("LOGNAME", (const char*) &buffer, 1);
+    }
 
     gid_t gid;
     if (group && group[0] != '\0') {
@@ -120,7 +131,7 @@ int main(int argc, char *argv[])
 
     if (pw == NULL) {
         if (setgroups(1, &gid) < 0)
-            err(1, "setgroups(%i)", gid);
+            err(1, "setgroups(%llu)", (unsigned long long) gid);
     } else {
         gid_t *glist;
         int ngroups = Getgrouplist(pw->pw_name, gid, &glist);
