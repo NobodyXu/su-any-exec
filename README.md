@@ -79,6 +79,6 @@ but it is only
  - `13.9kb` when building using `musl-1.2.0`, `clang-9.0.0-2` and `lld-9.0.0`.
  - `45.6kb` when still using the above toolchain, but instead built with `-static`.
 
-instead of `1.7MB`, which is installed `gosu 1.10.1` from `apt`.
+instead of `1.7MB`, which is running `gosu 1.10.1` from `apt`.
 Both are installed on `Intel x86-64` platform.
 
