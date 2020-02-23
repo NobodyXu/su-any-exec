@@ -24,6 +24,11 @@ can be used instead of names. Example:
 $ su-exec apache:1000 /usr/sbin/httpd -f /opt/www/httpd.conf
 ```
 
+## Warning
+
+Due to the fact that `su-exec` does not allocate new tty, it is vulnerable to [TTY hijacking and arbitrary code execution
+][1].
+
 ### Replace `sudo`
 
 If you compile softwares in a container, you probably need `sudo`, since compiling with root may not be
@@ -37,10 +42,22 @@ However, `sudo` is such a overkill for unattented auto-build of a container sinc
 
 So how to replace `sudo` with `su-exec` for containers? Simple, just execute the following lines with `root`:
 
+
+ - `14.3kb` when building using `glibc2.3`, `clang-9.0.0-2` and `lld-9.0.0` 
+ - `13.9kb` when building using `musl-1.2.0`, `clang-9.0.0-2` and `lld-9.0.0`.
+ - `45.6kb` when still using the above toolchain, but instead built with `-static`.
+
 ```
 cd /usr/local/bin/
 
+# For dynamic-linked glibc, 14.3kb
 wget https://github.com/NobodyXu/su-exec/releases/download/v0.3/su-exec
+
+# For dynamic-linked musl-libc, 13.9kb
+wget https://github.com/NobodyXu/su-exec/releases/download/v0.3/su-exec-musl
+
+# For static-linked musl-libc, 45.6kb
+wget https://github.com/NobodyXu/su-exec/releases/download/v0.3/su-exec-static-musl
 chmod a+xs su-exec
 ```
 
@@ -73,6 +90,13 @@ To workaround, use `su-exec env var=val command arg`.
 ## Why reinvent gosu?
 
 This does more or less exactly the same thing as [gosu](https://github.com/tianon/gosu)
-but it is only `14.7kb` when building using `clang-9.0.0-2` and `lld-9.0.0` instead of `1.7MB`, which is installed `gosu 1.10.1` from `apt`.
+but it is only
+
+ - `14.3kb` when building using `glibc2.3`, `clang-9.0.0-2` and `lld-9.0.0` 
+ - `13.9kb` when building using `musl-1.2.0`, `clang-9.0.0-2` and `lld-9.0.0`.
+ - `45.6kb` when still using the above toolchain, but instead built with `-static`.
+
+instead of `1.7MB`, which is running `gosu 1.10.1` from `apt`.
 Both are installed on `Intel x86-64` platform.
 
+[1]: https://ruderich.org/simon/notes/su-sudo-from-root-tty-hijacking
