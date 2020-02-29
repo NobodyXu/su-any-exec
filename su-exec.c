@@ -11,12 +11,6 @@
 #include <string.h>
 #include <unistd.h>
 
-static noreturn void usage(const char *argv0, int exitcode)
-{
-    printf("Usage: %s user-spec command [args]\n", argv0);
-    exit(exitcode);
-}
-
 static void parse_userspec(char *argv1, const char **user_p, const char **group_p)
 {
     char *user = argv1;
@@ -93,7 +87,7 @@ int Getgrouplist(const char *user, gid_t gid, gid_t **glist_p)
 int main(int argc, char *argv[])
 {
     if (argc < 3)
-        usage(argv[0], 0);
+        errx(0, "Usage: %s user-spec command [args]\n", argv[0]);
 
     const char *user, *group;
 
