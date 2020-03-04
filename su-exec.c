@@ -87,7 +87,7 @@ int Getgrouplist(const char *user, gid_t gid, gid_t **glist_p)
 int main(int argc, char *argv[])
 {
     if (argc < 3)
-        errx(0, "Usage: %s user-spec command [args]\n", argv[0]);
+        errx(0, "Usage: %s user-spec command [args]", argv[0]);
 
     const char *user, *group;
 
