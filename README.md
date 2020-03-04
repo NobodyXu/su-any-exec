@@ -100,3 +100,7 @@ instead of `1.7MB`, which is running `gosu 1.10.1` from `apt`.
 Both are installed on `Intel x86-64` platform.
 
 [1]: https://ruderich.org/simon/notes/su-sudo-from-root-tty-hijacking
+
+## Testing
+
+Run `docker build .` where `docker` can be replace by `podman`, or `buildah`.
