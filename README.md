@@ -77,7 +77,7 @@ PID   USER     TIME   COMMAND
     1 postgres   0:00 ps aux
 ```
 
-## Possible Vulnerability
+## Possible Vulnerabilities
 
  - `su-exec` is not like `sudo` but more like `su`, it does not modify any environment variables other than `HOME`, which might be undesirable.
  To workaround, use `su-exec env var=val command arg`.
