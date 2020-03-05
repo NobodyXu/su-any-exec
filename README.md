@@ -24,11 +24,6 @@ can be used instead of names. Example:
 $ su-exec apache:1000 /usr/sbin/httpd -f /opt/www/httpd.conf
 ```
 
-## Warning
-
-Due to the fact that `su-exec` does not allocate new tty, it is vulnerable to [TTY hijacking and arbitrary code execution
-][1].
-
 ### Replace `sudo`
 
 If you compile softwares in a container, you probably need `sudo`, since compiling with root may not be
@@ -84,8 +79,9 @@ PID   USER     TIME   COMMAND
 
 ## Possible Vulnerability
 
-`su-exec` is not like `sudo` but more like `su`, it does not modify any environment variables other than `HOME`, which might be undesirable.
+ - `su-exec` is not like `sudo` but more like `su`, it does not modify any environment variables other than `HOME`, which might be undesirable.
 To workaround, use `su-exec env var=val command arg`.
+ - Due to the fact that `su-exec` does not allocate new tty, it is vulnerable to [TTY hijacking and arbitrary code execution][1].
 
 ## Why reinvent gosu?
 
