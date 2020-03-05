@@ -79,8 +79,8 @@ PID   USER     TIME   COMMAND
 
 ## Possible Vulnerabilities
 
- - `su-exec` is not like `sudo` but more like `su`, it does not modify any environment variables other than `HOME`, which might be undesirable.
- To workaround, use `su-exec env var=val command arg`.
+ - `su-exec` is not like `sudo` but more like `su`, it does not modify any environment variables other than `HOME`, `USER`, `LOGNAME`, which 
+ might be undesirable. To workaround, use `su-exec env var=val command arg`.
 
 ### Vulnerabilities that does not affect container
 
