@@ -81,6 +81,9 @@ PID   USER     TIME   COMMAND
 
  - `su-exec` is not like `sudo` but more like `su`, it does not modify any environment variables other than `HOME`, which might be undesirable.
  To workaround, use `su-exec env var=val command arg`.
+
+### Vulnerabilities that does not affect container
+
  - Due to the fact that `su-exec` does not allocate new tty, it is vulnerable to [TTY hijacking and arbitrary code execution][1].
  An easy workaround will be to `chmod 600 /dev/tty`, but to ensure the change is persistent, you need to modify udev rule.
 
